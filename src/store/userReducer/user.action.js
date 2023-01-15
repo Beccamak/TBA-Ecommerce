@@ -10,6 +10,9 @@ export const userSignInUpStart =  () => {
  export const userSignInUpFailed =  (error) => {
     return createAction(USER_ACTION_TYPES.USER_SIGN_IN_UP_FAILED, error);
  }
+ export const setIsAccountOpen = (bool) => {
+   return createAction(USER_ACTION_TYPES.SET_IS_ACCOUNT_OPEN, bool);
+ }
  
 // export const setCurrentUSer = (user) => {
 //     return createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user);

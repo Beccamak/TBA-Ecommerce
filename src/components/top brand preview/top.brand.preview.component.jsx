@@ -9,8 +9,8 @@ const TopBrandPreview = ({topBrand}) => {
     return(
         <div  className='deals-section'>
        
-        <div  className='category-preview'>
-        {topBrandProducts.filter((product)=> product.brandDetails.brandName === topBrand).filter((_, index) => index < 6)
+        <div  className='brand-preview'>
+        {topBrandProducts.filter((product)=> product.brandDetails.brandName === topBrand).filter((_, index) => index < 5)
             .map((item) => {
             return <ProductCard key={item.id} product={item}  /> 
         })}

@@ -26,7 +26,7 @@ const CartDropdown = () => {
         </div>
 
         )
-
+        {(hasTransitionedIn || isCartOpen) && <CartDropdown /> }
 }
 
 

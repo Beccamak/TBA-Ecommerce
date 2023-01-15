@@ -19,13 +19,13 @@ const Home = () => {
           <TopCategories />
           <LuckyGuess />
            <TopBrands />
-           <OutstandingSales />
+           
+           </motion.div>
+           )
+          }
           
-         </motion.div>
-    )
-}
-
-
-export default Home;
-
+          
+          export default Home;
+          
+          // <OutstandingSales />
 // <FlashSales />

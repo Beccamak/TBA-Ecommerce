@@ -2,8 +2,11 @@ import './sign-in-form.styles.css';
 import { useState } from 'react';
 import { createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userSignInUpFailed, userSignInUpStart, userSignInUpSuccess } from '../../store/userReducer/user.action';
+import { selectActionIsLoading } from '../../store/userReducer/user.selector';
+import Spinner from '../spinner/spinner.component';
+import { useNavigate } from 'react-router-dom';
 
 const defaultFormFields = {
     email: "",
@@ -17,7 +20,11 @@ const SignInForm = () =>{
     const [toggleIcon, setToggleIcon] = useState(true);
     const [hideOrShow, setHideOrShow] = useState("hide");
    const dispatch = useDispatch();
+   const actionIsLoading = useSelector(selectActionIsLoading);
     const {email, password, type} = formFields;
+    const navigate = useNavigate();
+
+    const onSuccessfulSignIn = () => navigate("/")
 
 
     const resetFormFields = () => {
@@ -30,6 +37,7 @@ const SignInForm = () =>{
             const {user} = await signInWithGooglePopup();
             await createUserDocumentFromAuth(user);
             dispatch(userSignInUpSuccess(user));
+            onSuccessfulSignIn();
             // resetFormFields();
         } catch (error) {
             dispatch(userSignInUpFailed(error));
@@ -43,6 +51,7 @@ const SignInForm = () =>{
            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
            dispatch(userSignInUpSuccess(user)); 
            resetFormFields();
+           onSuccessfulSignIn();
            
         } catch (error) {
             switch(error.code){
@@ -63,7 +72,7 @@ const SignInForm = () =>{
             
         }
     }
-
+   
     const handleChange = (event) => {
         const {name, value} = event.target;
         setFormFields({...formFields, [name]: value});
@@ -98,11 +107,11 @@ const SignInForm = () =>{
             <Link className='forgot-password' to='/'>Forgot Password?</Link>
             </div>
             <div className='btn-group'>
-            <button className='btn log-in'>Log in</button>
+            <button className='btn log-in'>{actionIsLoading? <Spinner spinner="small" />:"Log in"}</button>
             <div className='line'></div>
             <button className='btn log-in-google' onClick={signInWithGoogle}>
             <i className='bx bxl-google google-icon'></i>
-            <span className='login-text'>Login with Google</span>
+            <span className='login-text'>{actionIsLoading? <Spinner spinner="small" />:"Login with google"}</span>
             </button>
             </div>
             </form> 

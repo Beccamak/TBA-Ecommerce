@@ -40,7 +40,7 @@ const App = () => {
   }, []);
 
   return isLoading ? (
-    <Spinner />
+    <Spinner spinner="big"/>
   ) : (
     <div>
       <AnimatePresence>

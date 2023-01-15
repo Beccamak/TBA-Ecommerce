@@ -10,7 +10,7 @@ const Footer = () => {
                     <div>
                     <Link className='footer-logo' to='/'>Logo</Link>
                     </div>
-                    <p className='copyright'>Copyright &copy; 2022 by Rebecca, Inc. All rights reserved.</p>
+                    <p className='copyright'>Copyright &copy; 2023 by Rebecca, Inc. All rights reserved.</p>
                 </div>
                 <div>
                     <p className='footer-heading'>Contact us</p>
@@ -34,7 +34,7 @@ const Footer = () => {
                         </ul>
                 </div>
                 <div>
-                <p className='footer-heading'>Company</p>
+                <p className='footer-heading'>Store</p>
                         <ul className='footer-links'>
                         <Link className='footer-link' to="/">About Virtual Store</Link>
                         <Link className='footer-link' to="/">For Business</Link>
@@ -47,6 +47,7 @@ const Footer = () => {
                         <ul className='footer-links'>
                         <Link className='footer-link' to="/">Help center</Link>
                         <Link className='footer-link' to="/">Privacy & terms</Link>
+                        <Link className='footer-link' to="/">Terms and Conditions</Link>
                         <Link className='footer-link' to="/">Faqs</Link>
                         </ul>
                 </div>

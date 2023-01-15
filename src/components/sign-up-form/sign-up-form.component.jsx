@@ -4,7 +4,8 @@ import Form from '../form/form.component';
 import { createAuthUserWithEmailAndPassword,
 createUserDocumentFromAuth} from '../../utils/firebase';
 import { userSignInUpStart, userSignInUpSuccess, userSignInUpFailed } from '../../store/userReducer/user.action';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
  const defaultFormFields = {
         firstName: '',
         lastName: '',
@@ -16,6 +17,8 @@ const SignUpForm = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const{firstName, lastName, email, password, confirmPassword} = formFields;
    const dispatch = useDispatch();
+   const navigate = useNavigate;
+   const onSuccessfulSignUp = () => navigate("/");
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
@@ -32,6 +35,7 @@ const SignUpForm = () =>{
              await createUserDocumentFromAuth(user, {firstName, lastName})
             resetFormFields();
             dispatch(userSignInUpSuccess(user));
+            onSuccessfulSignUp();
             alert("Sucessful, you are signed in now");
            
             

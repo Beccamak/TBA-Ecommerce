@@ -2,7 +2,6 @@ import './navigation.styles.css';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/user.context';
-import { signOutUser } from '../../utils/firebase';
 import CartDropdown from '../../components/cart dropdown/cart.dropdown.component';
 import { selectCartCount, selectIsCartOpen } from '../../store/cart reducer/cart.selector';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,10 +11,10 @@ import { setSearchString } from '../../store/products reducer/products.action';
 import useMountAndUnmountTransition from '../../components/transition hook/use.transition.component';
 import Button from '../../components/button/button.component';
 import Footer from '../footer/footer.component';
-import { selectCurrentUser } from '../../store/userReducer/user.selector';
-// import firebase from 'firebase';
-// import 'firebase/auth';
-// import 'firebase/database';
+import { selectCurrentUser, selectIsAccountOpen } from '../../store/userReducer/user.selector';
+import AccountDropdown from "../../components/account dropdown/account.dropdown.component";
+import { setIsAccountOpen } from '../../store/userReducer/user.action';
+
 
 
 const Navigation = () => {
@@ -24,8 +23,10 @@ const Navigation = () => {
     const currentUser = useSelector(selectCurrentUser);
    const cartCount = useSelector(selectCartCount);
    const isCartOpen = useSelector(selectIsCartOpen);
+   const isAccountOpen = useSelector(selectIsAccountOpen);
    const searchString = useSelector(selectSearchString);
    const hasTransitionedIn = useMountAndUnmountTransition(isCartOpen, 1000);
+   const accountHasTransitionedIn = useMountAndUnmountTransition(isAccountOpen, 1000);
     const [sticky, setSticky] = useState(false);
    const onSearchChangeHandler = (event) => {
     const searchStringValue = event.target.value.toLocaleLowerCase();
@@ -37,6 +38,9 @@ const Navigation = () => {
  
    const toggleIsCartOpen = () => {
        dispatch(setIsCartOpen(!isCartOpen));
+   }
+   const toggleIsAccountOpen = () => {
+       dispatch(setIsAccountOpen(!isAccountOpen));
    }
    useEffect(()=> {
     if(isCartOpen){
@@ -54,34 +58,8 @@ const Navigation = () => {
         return () => window.removeEventListener('scroll', handleScroll);
 
    })
-//    useEffect(() => {
-//     firebase.auth().onAuthStateChanged((currentUser) => {
-//         if (currentUser) {
-//             // User is signed in.
-//             // setUser(user);
-//             firebase.auth().getUser(currentUser.uid)
-//             .then((userRecord) => {
-//                 setUser(userRecord.toJSON());
-//                 console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
-//             })
-//             .catch((error) => {
-//                 console.log('Error fetching user data:', error);
-//             });
-//         } else {
-//             // User is signed out.
-//             return;
-//         }
-//     });
-// }, []);
-// const userId = currentUser.uid;
-// const userRef = firebase.database().ref(`users/${userId}`);
 
-// userRef.on("value", (snapshot) => {
-//     console.log(snapshot.val()); // This will contain all the data for the user
-//   }, (error) => {
-//     console.log("Error fetching user data:", error);
-//   });
-
+ 
     return(
         <Fragment>
         <div className={`navigation ${sticky? "sticky" : ""}`}>
@@ -132,8 +110,8 @@ const Navigation = () => {
             </Link>
             {
                 currentUser ?
-                <Link className='nav-link' to="/">
-                 <div onClick={signOutUser} className='nav-link-details'>
+                <Link className='nav-link' onClick={toggleIsAccountOpen} to="/">
+                 <div  className='nav-link-details'>
                  <span className='home-name'>My Account</span>
                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="bar-icon w-6 h-6">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -153,7 +131,9 @@ const Navigation = () => {
              
             </div>
         </div>
+       
         {(hasTransitionedIn || isCartOpen) && <CartDropdown /> }
+        {(accountHasTransitionedIn || isAccountOpen) && <AccountDropdown name={currentUser.displayName} email={currentUser.email}/> }
         </div>
         <div className="container">
         <Outlet />
@@ -167,7 +147,6 @@ const Navigation = () => {
 
 
 export default Navigation;
-           
 // <svg xmlns="http://www.w3.org/2000/svg" className="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
 //              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 //            </svg>
