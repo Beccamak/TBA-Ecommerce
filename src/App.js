@@ -30,11 +30,10 @@ const App = () => {
   const { currentProduct } = useContext(DisplayDetails);
   const isLoading = useSelector(selectIsLoading);
   const location = useLocation();
-  console.log("location", location);
 
-  useEffect(() => {
-    addCollectionAndDocuments("categories", CATEGORIES)   
-  }, []);
+  // useEffect(() => {
+  //   addCollectionAndDocuments("categories", CATEGORIES)   
+  // }, []);
 
   useEffect(() => {
     dispatch(fetchCategoriesOnAppLoad());

@@ -73,6 +73,8 @@ const Flyout = () => {
 
     const onCategoryHandler = (event) => {
         dispatch(setCurrentCategory(event.target.innerText));
+        setIsHover(false); 
+        setFlyout(false);
     }
     
     let sub  = [];
@@ -111,7 +113,7 @@ const Flyout = () => {
                      {icons[index]}
                      <Link  to='/' className='main-cat' onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>{categoryObject.MainCategory}</Link>
                      </div>
-                            <div className='cat-collections' onMouseEnter={categoryHoverMouseEnterHandler} onMouseLeave={categoryHoverMouseLeaveHandler} style={style} >
+                            <div className='cat-collections' onMouseEnter={categoryHoverMouseEnterHandler} onMouseLeave={categoryHoverMouseLeaveHandler}  style={style} >
                             
                             {arr.map((item) => {
                                     

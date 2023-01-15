@@ -1,5 +1,10 @@
 import './top.brands.styles.css';
 import ProductsHeader from '../products-header/products.header.component';
+import Loius from "../../assets/images/louis.png";
+import Samsung from "../../assets/images/samsung.png";
+import Laneige from "../../assets/images/laneige.webp";
+import Apple from "../../assets/images/apple.png";
+import Led from "../../assets/images/led.png";
 const TopBrands = () => {
     const topBrands = [
         {   
@@ -169,11 +174,21 @@ const TopBrands = () => {
         <ProductsHeader children='Top Brands' headerType="normal" route="shop-tb"/>
 
         <div className='top-brands-container'>
-            <div className='top-brand'>1</div>
-            <div className='top-brand'>1</div>
-            <div className='top-brand'>1</div>
-            <div className='top-brand'>1</div>
-            <div className='top-brand'>1</div>
+            <div className='top-brand'>
+            <img className='brand-img' src={Loius}/>
+            </div>
+            <div className='top-brand laneige'>
+            <img className='brand-img' src={Laneige}/> 
+            </div>
+            <div className='top-brand'>
+            <img className='brand-img' src={Samsung}/> 
+            </div>
+            <div className='top-brand'>
+            <img className='brand-img' src={Apple}/> 
+            </div>
+            <div className='top-brand'>
+            <img className='brand-img' src={Led}/> 
+            </div>
         </div>
         </div>
         

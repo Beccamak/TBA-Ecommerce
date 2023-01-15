@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Form from '../form/form.component';
 import { createAuthUserWithEmailAndPassword,
 createUserDocumentFromAuth} from '../../utils/firebase';
-
+import { userSignInUpStart, userSignInUpSuccess, userSignInUpFailed } from '../../store/userReducer/user.action';
+import { useDispatch } from 'react-redux';
  const defaultFormFields = {
         firstName: '',
         lastName: '',
@@ -14,13 +15,14 @@ createUserDocumentFromAuth} from '../../utils/firebase';
 const SignUpForm = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const{firstName, lastName, email, password, confirmPassword} = formFields;
-   
+   const dispatch = useDispatch();
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
     }
     const onSubmitHandler = async (event) => {
         event.preventDefault();
+        dispatch(userSignInUpStart());
         if(password !== confirmPassword){
             alert("passwords do not match");
             return;
@@ -29,11 +31,24 @@ const SignUpForm = () =>{
             const {user} = await createAuthUserWithEmailAndPassword (email, password);
              await createUserDocumentFromAuth(user, {firstName, lastName})
             resetFormFields();
+            dispatch(userSignInUpSuccess(user));
+            alert("Sucessful, you are signed in now");
+           
             
         } catch (error) {
             if(error.code === 'auth/email-already-in-use'){
+                dispatch(userSignInUpFailed(Error));
                 alert("Email already in use");
-            }else{
+            }else if(error.code === 'auth/invalid-email'){
+                dispatch(userSignInUpFailed(Error));
+                alert("Please use a valid email address");
+            }else if(error.code === 'auth/weak-password'){
+                dispatch(userSignInUpFailed(Error));
+                alert("Password should be at least 6 characters");
+            }
+            else{
+                dispatch(userSignInUpFailed(Error));
+                console.log(error.message);
             }
         }
     }
@@ -43,8 +58,8 @@ const SignUpForm = () =>{
     }
     return(
         <div className='sign-up-container'>
-        <Form   header ="Sign up" handleSubmit={onSubmitHandler} formDetails={{email: email, password:password, confirmPassword: confirmPassword, handleChange: onHandleChange}} 
-        buttonDetails={{text: "Sign up", facebookText:"Login with Facebook", googleText:"Login in with Google"}}/>
+        <Form   header ="Sign up" handleSubmit={onSubmitHandler} formDetails={{firstName: firstName, lastName: lastName,email: email, password:password, confirmPassword: confirmPassword, handleChange: onHandleChange}} 
+        buttonDetails={{text: "Sign up", facebookText:"Login with Facebook", googleText:"Sign up with Google"}}/>
         {/*<h2 className='sign-up-title'>Don't have an account?</h2>
         <span>Sign up with email and password</span>
             <form onSubmit={onSubmitHandler}>

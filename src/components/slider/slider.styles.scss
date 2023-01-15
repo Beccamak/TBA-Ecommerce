@@ -2,7 +2,7 @@
     .carousel-slider{
         //    background-color: yellow;
             // width: 400px;
-            // overflow: hidden;
+            overflow: hidden;
             // font-size: 28.8rem;
             position: relative;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -23,8 +23,19 @@
                 // background-size: contain;
                 // width: 100%;
                 
-                .slide-img{
-                  
+                .banner-img{
+                    position: relative;
+
+                    .banner-txt{
+                        position: absolute;
+                        top: 40%;
+                        left: 0%;
+                        transform: translateY(-40%);
+                        font-size: 5.6rem;
+                        padding-left: 2rem;
+                        width: 30%;
+
+                    }
                 }
             }
             .btn-slide{
@@ -81,7 +92,7 @@
 }
 
 .small{
-    align-self: center;
-    width: 25%;
+    // align-self: center;
+    width: 25%
 
 }

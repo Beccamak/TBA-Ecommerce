@@ -21,11 +21,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
+export const auth = getAuth(app);
 
 
 //Giving the database a name
-export const database = getFirestore();
+export const database = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters(
@@ -100,3 +100,4 @@ export const getCategoriesAndDocuments = async() => {
     return categoriesArray
     
 }
+

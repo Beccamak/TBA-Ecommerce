@@ -20,7 +20,7 @@ root.render(
   <Provider store={store}>
   <BrowserRouter>
   
-  <UserProvider>
+  {/*<UserProvider> remeber their clsoin tags*/}
   {/*<CategoriesProvider>*/}
   <DisplayDetailsProvider>
   <FilterDetailsProvider>
@@ -29,8 +29,6 @@ root.render(
   </ScrollTopToDown>
   </FilterDetailsProvider>
   </DisplayDetailsProvider>
-  {/*</CategoriesProvider>*/}
-  </UserProvider>
   </BrowserRouter>
   </Provider>
   </React.StrictMode>

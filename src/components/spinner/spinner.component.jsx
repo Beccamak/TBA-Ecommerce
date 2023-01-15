@@ -3,9 +3,9 @@ import './spinner.styles.css';
 
 const Spinner = () => {
     return (
-        <div>
-            Page Loading
-        </div>
+        <div className="loading">
+        <div className="loading-spinner"></div>
+      </div>
     )
 }
 

@@ -2,7 +2,8 @@ import './sign-in-form.styles.css';
 import { useState } from 'react';
 import { createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase';
 import { Link } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { userSignInUpFailed, userSignInUpStart, userSignInUpSuccess } from '../../store/userReducer/user.action';
 
 const defaultFormFields = {
     email: "",
@@ -15,7 +16,7 @@ const SignInForm = () =>{
     const [formFields, setFormFields] = useState(defaultFormFields);
     const [toggleIcon, setToggleIcon] = useState(true);
     const [hideOrShow, setHideOrShow] = useState("hide");
-   
+   const dispatch = useDispatch();
     const {email, password, type} = formFields;
 
 
@@ -24,12 +25,15 @@ const SignInForm = () =>{
     }
     const signInWithGoogle = async (event) => {
         event.preventDefault();
+        dispatch(userSignInUpStart());
         try {
             const {user} = await signInWithGooglePopup();
             await createUserDocumentFromAuth(user);
+            dispatch(userSignInUpSuccess(user));
             // resetFormFields();
         } catch (error) {
-            
+            dispatch(userSignInUpFailed(error));
+            console.log(error.message);
         }
     }
     const handleSubmit = async (event) => {
@@ -37,16 +41,22 @@ const SignInForm = () =>{
 
         try {
            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
-            resetFormFields();
+           dispatch(userSignInUpSuccess(user)); 
+           resetFormFields();
+           
         } catch (error) {
             switch(error.code){
                 case 'auth/wrong-password':
                   alert('Incorrect password for email');
                   break;
+                case 'auth/invalid-email':
+                  alert('Please enter a valid email address');
+                  break;
                 case 'auth/user-not-found':
                   alert('No user associated with this email');
                   break;
                 default:
+                    console.log(error.message);
 
                   
               }

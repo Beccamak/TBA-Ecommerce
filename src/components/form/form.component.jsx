@@ -1,15 +1,30 @@
 import './form.styles.scss';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { signInWithGooglePopup, createUserDocumentFromAuth } from '../../utils/firebase';
+import { useDispatch } from 'react-redux';
+import { userSignInUpFailed, userSignInUpStart, userSignInUpSuccess } from '../../store/userReducer/user.action';
 const Form = ({ header, handleSubmit, formDetails, buttonDetails}
 ) => {
-    const {email, handleChange, password, confirmPassword} = formDetails;
+    const {firstName, lastName, email, handleChange, password, confirmPassword} = formDetails;
     const {text, googleText} = buttonDetails;
+    const dispatch = useDispatch();
 
     const [toggleIcon, setToggleIcon] = useState(true);
     const [hideOrShow, setHideOrShow] = useState("hide");
-
+    const signUpOrInWithGoogle = async (event) => {
+        event.preventDefault();
+        dispatch(userSignInUpStart());
+        try {
+            const {user} = await signInWithGooglePopup();
+            await createUserDocumentFromAuth(user);
+            dispatch(userSignInUpSuccess(user));
+            // resetFormFields();
+        } catch (error) {
+            dispatch(userSignInUpFailed);
+            
+        }
+    }
     const[type, setType] = useState("password")
     const onEyeIconClick = () => {
         setToggleIcon(!toggleIcon);
@@ -28,7 +43,13 @@ const Form = ({ header, handleSubmit, formDetails, buttonDetails}
         <header className='sign-in-title'>{header}</header>
         <form onSubmit={handleSubmit}>
         <div className='label-input'>
-        <input className='form-input' type="text" name="email" value={email}  placeholder='Email' onChange={handleChange} required/>
+        <input className='form-input'  type="text" name="firstName"  placeholder='First Name'value={firstName} onChange={handleChange} required/>
+        </div>
+        <div className='label-input'>
+        <input  className='form-input' type="text" name="lastName"  placeholder='Last Name' value={lastName} onChange={handleChange} required/>
+        </div>
+        <div className='label-input'>
+        <input className='form-input' type="email" name="email" value={email}  placeholder='Email' onChange={handleChange} required/>
         </div>
         <div className='label-input'>
          <input className='form-input' type={type} name="password" value={password} placeholder='Password' onChange={handleChange} required/>
@@ -47,7 +68,7 @@ const Form = ({ header, handleSubmit, formDetails, buttonDetails}
         <button className='btn log-in'>{text}</button>
         <div className='line'></div>
         <div className='btn-container'>
-        <button className='btn log-in-google'>
+        <button onClick={signUpOrInWithGoogle} className='btn log-in-google'>
         <i className='bx bxl-google google-icon'></i>
         <span className='login-text'>{googleText}</span>
         </button>

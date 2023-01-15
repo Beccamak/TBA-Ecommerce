@@ -12,11 +12,16 @@ import { setSearchString } from '../../store/products reducer/products.action';
 import useMountAndUnmountTransition from '../../components/transition hook/use.transition.component';
 import Button from '../../components/button/button.component';
 import Footer from '../footer/footer.component';
+import { selectCurrentUser } from '../../store/userReducer/user.selector';
+// import firebase from 'firebase';
+// import 'firebase/auth';
+// import 'firebase/database';
+
 
 const Navigation = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {currentUser} = useContext(UserContext);
+    const currentUser = useSelector(selectCurrentUser);
    const cartCount = useSelector(selectCartCount);
    const isCartOpen = useSelector(selectIsCartOpen);
    const searchString = useSelector(selectSearchString);
@@ -49,6 +54,34 @@ const Navigation = () => {
         return () => window.removeEventListener('scroll', handleScroll);
 
    })
+//    useEffect(() => {
+//     firebase.auth().onAuthStateChanged((currentUser) => {
+//         if (currentUser) {
+//             // User is signed in.
+//             // setUser(user);
+//             firebase.auth().getUser(currentUser.uid)
+//             .then((userRecord) => {
+//                 setUser(userRecord.toJSON());
+//                 console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
+//             })
+//             .catch((error) => {
+//                 console.log('Error fetching user data:', error);
+//             });
+//         } else {
+//             // User is signed out.
+//             return;
+//         }
+//     });
+// }, []);
+// const userId = currentUser.uid;
+// const userRef = firebase.database().ref(`users/${userId}`);
+
+// userRef.on("value", (snapshot) => {
+//     console.log(snapshot.val()); // This will contain all the data for the user
+//   }, (error) => {
+//     console.log("Error fetching user data:", error);
+//   });
+
     return(
         <Fragment>
         <div className={`navigation ${sticky? "sticky" : ""}`}>
@@ -101,12 +134,12 @@ const Navigation = () => {
                 currentUser ?
                 <Link className='nav-link' to="/">
                  <div onClick={signOutUser} className='nav-link-details'>
-                       <svg xmlns="http://www.w3.org/2000/svg" className="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                             <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                             </svg>
-                             <span>Logout</span>
-                          </div>
-                     </Link> 
+                 <span className='home-name'>My Account</span>
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="bar-icon w-6 h-6">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                 </svg>
+                 </div>
+                 </Link> 
                 : 
                 <Link className='nav-link' to="/auth">
                 <div className='nav-link-details'>
@@ -140,3 +173,7 @@ export default Navigation;
 //            </svg>
 // 
 
+
+                //  <svg xmlns="http://www.w3.org/2000/svg" className="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                //        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                //        </svg>
